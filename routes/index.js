@@ -3,45 +3,53 @@ var router = express.Router();
 
 const mydata = {
   title: 'AOT-OPS-TEST Narrative Log Book',
-  onCall: [
+  operators: [
     {
       name: "Dave Newman",
       title: "Engineer",
       isQualifiedOperator: false,
-      phone: "505-695-3878"
+      phone: "505-695-3878",
+      isOnCall: true,
     },
     {
       name: "Steven Dryja",
       title: "Technician",
       isQualifiedOperator: true,
-      phone: "505-695-1234"
+      phone: "505-695-1234",
+      isOnCall: true,
     },
     {
       name: "Steven Dryja",
       title: "Technician",
       isQualifiedOperator: false,
-      phone: "505-695-1234"
+      phone: "505-695-1234",
+      isOnCall: true,
     },
     {
       name: "Steven Dryja",
       title: "Technician",
       isQualifiedOperator: false,
-      phone: "505-695-1234"
+      phone: "505-695-1234",
+      isOnCall: true,
+    },
+    {
+      name: "Bob Saget",
+      title: "Technician",
+      isQualifiedOperator: false,
+      phone: "505-695-1234",
+      isOnCall: true,
     },
     {
       name: "Steven Dryja",
       title: "Technician",
       isQualifiedOperator: false,
-      phone: "505-695-1234"
-    },
-    {
-      name: "Steven Dryja",
-      title: "Technician",
-      isQualifiedOperator: false,
-      phone: "505-695-1234"
+      phone: "505-695-1234",
+      isOnCall: true,
     },
   ]
 }
+
+const onCall = mydata.operators.filter(operator => operator.isOnCall == true);
 
 const cryoPosts = [
   {
@@ -122,7 +130,7 @@ const issuePosts = [
 router.get('/', function (req, res, next) {
   res.render('index', {
     title: mydata.title,
-    onCall: mydata.onCall,
+    onCall: onCall,
     cryoPosts: cryoPosts,
     waterPosts: waterPosts,
     target4Posts: target4Posts,
