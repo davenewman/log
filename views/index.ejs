@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    <%= title %>
+  </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
+
+</head>
+
+<body>
+  <div class="container"> <!--main container start-->
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+          aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/"><img src="/images/atomic.svg" alt="atomic" width="40" height="40"></a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/newentry">New Log Entry</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Shift Turnover</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Admin Tools</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <h1>
+      <%= title %>
+    </h1>
+
+    <!-- On Call -->
+
+    <% if (onCall.length> 0) { %>
+      <div class="row">
+        <div class="col py-3">
+          <p>Currently On Call:</p>
+
+          <% onCall.forEach( person=> { %>
+            <a tabindex="0" class="btn btn-sm <%= person.isQualifiedOperator? 'btn-info' : 'btn-danger' %> m-1"
+              role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-title="<%= person.name %>"
+              data-bs-content="<%= person.title %> | <%= person.phone %>">
+              <%= person.name %>
+            </a>
+            <% }) %>
+        </div>
+      </div>
+      <% } %>
+
+
+
+        <div class="row">
+          <div class="col">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="cryo-tab" data-bs-toggle="tab" data-bs-target="#cryo" type="button"
+                  role="tab" aria-controls="home" aria-selected="true">Cryo</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="water-tab" data-bs-toggle="tab" data-bs-target="#water" type="button"
+                  role="tab" aria-controls="profile" aria-selected="false">Water</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="target4-tab" data-bs-toggle="tab" data-bs-target="#target4" type="button"
+                  role="tab" aria-controls="messages" aria-selected="false">Target IV</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="issues-tab" data-bs-toggle="tab" data-bs-target="#issues" type="button"
+                  role="tab" aria-controls="settings" aria-selected="false">Issues</button>
+              </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="cryo" role="tabpanel" aria-labelledby="cryo-tab" tabindex="0">
+
+                <% if (cryoPosts.length> 0) { %>
+                  <% cryoPosts.forEach(post=> { %>
+                    <div class="card mt-3">
+                      <div class="card-body">
+                        <h6 class=" mt-1 card-subtitle">Author: <%= post.author %>
+                        </h6>
+                        <h6 class="mt-1 card-subtitle">Date: <%= post.date %>
+                        </h6>
+                        <% if (post.relatedIssue.length> 0) { %>
+                          <h6 class="mt-1 card-subtitle">Pertains to Issue: <%= post.relatedIssue %>
+                          </h6>
+                          <% } %>
+
+                            <% if (post.tags.length> 0) { %>
+                              <h6 class="mt-1 card-subtitle"> Tags:
+                                <% post.tags.forEach(tag=> { %>
+                                  <button type="button" class="btn btn-outline-secondary btn-sm">
+                                    <%= tag %>
+                                  </button>
+                                  <% }) %>
+                              </h6>
+                              <% } %>
+                                <div class="mt-1">
+                                  <%- post.html %>
+                                </div>
+                      </div>
+                    </div>
+
+                    <% }) %>
+                      <% } else { %>
+                        <p>No entries available.</p>
+
+                        <% } %>
+
+              </div>
+              <div class="tab-pane" id="water" role="tabpanel" aria-labelledby="water-tab" tabindex="0">
+                <% if (waterPosts.length> 0) { %>
+                  <% waterPosts.forEach(post=> { %>
+                    <div class="card mt-3">
+                      <div class="card-body">
+                        <h6 class=" mt-1 card-subtitle">Author: <%= post.author %>
+                        </h6>
+                        <h6 class="mt-1 card-subtitle">Date: <%= post.date %>
+                        </h6>
+                        <% if (post.relatedIssue.length> 0) { %>
+                          <h6 class="mt-1 card-subtitle">Pertains to Issue: <%= post.relatedIssue %>
+                          </h6>
+                          <% } %>
+
+                            <% if (post.tags.length> 0) { %>
+                              <h6 class="mt-1 card-subtitle"> Tags:
+                                <% post.tags.forEach(tag=> { %>
+                                  <button type="button" class="btn btn-outline-secondary btn-sm">
+                                    <%= tag %>
+                                  </button>
+                                  <% }) %>
+                              </h6>
+                              <% } %>
+                                <div class="mt-1">
+                                  <%- post.html %>
+                                </div>
+                      </div>
+                    </div>
+
+                    <% }) %>
+                      <% } else { %>
+                        <p>No entries available.</p>
+
+                        <% } %>
+
+              </div>
+              <div class="tab-pane" id="target4" role="tabpanel" aria-labelledby="target4-tab" tabindex="0">
+                <% if (target4Posts.length> 0) { %>
+                  <% target4Posts.forEach(post=> { %>
+                    <div class="card mt-3">
+                      <div class="card-body">
+                        <h6 class=" mt-1 card-subtitle">Author: <%= post.author %>
+                        </h6>
+                        <h6 class="mt-1 card-subtitle">Date: <%= post.date %>
+                        </h6>
+                        <% if (post.relatedIssue.length> 0) { %>
+                          <h6 class="mt-1 card-subtitle">Pertains to Issue: <%= post.relatedIssue %>
+                          </h6>
+                          <% } %>
+
+                            <% if (post.tags.length> 0) { %>
+                              <h6 class="mt-1 card-subtitle"> Tags:
+                                <% post.tags.forEach(tag=> { %>
+                                  <button type="button" class="btn btn-outline-secondary btn-sm">
+                                    <%= tag %>
+                                  </button>
+                                  <% }) %>
+                              </h6>
+                              <% } %>
+                                <div class="mt-1">
+                                  <%- post.html %>
+                                </div>
+                      </div>
+                    </div>
+
+                    <% }) %>
+                      <% } else { %>
+                        <p>No entries available.</p>
+
+                        <% } %>
+
+              </div>
+              <div class="tab-pane" id="issues" role="tabpanel" aria-labelledby="issues-tab" tabindex="0">
+                <% if (issuePosts.length> 0) { %>
+                  <% issuePosts.forEach(post=> { %>
+                    <div class="card mt-3">
+                      <div class="card-body">
+                        <h5 class="mt-1 card-title">
+                          <%= post.title %>
+                        </h5>
+                        <h6 class=" mt-1 card-subtitle">Author: <%= post.author %>
+                        </h6>
+                        <h6 class="mt-1 card-subtitle">Date: <%= post.date %>
+                        </h6>
+
+                        <% if (post.tags.length> 0) { %>
+                          <h6 class="mt-1 card-subtitle"> Tags:
+                            <% post.tags.forEach(tag=> { %>
+                              <button type="button" class="btn btn-outline-secondary btn-sm">
+                                <%= tag %>
+                              </button>
+                              <% }) %>
+                          </h6>
+                          <% } %>
+                            <div class="mt-1">
+                              <%- post.html %>
+                            </div>
+                      </div>
+                    </div>
+
+                    <% }) %>
+                      <% } else { %>
+                        <p>No entries available.</p>
+
+                        <% } %>
+
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+
+
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+          crossorigin="anonymous"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script>
+          const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+          const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
+
+
+
+
+
+        </script>
+  </div> <!--main container end-->
+</body>
+
+</html>
