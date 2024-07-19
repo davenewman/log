@@ -68,19 +68,18 @@
                 <div class="row">
                     <h2>New Log Entry</h2>
                     <div class="col-md-6 py-1">
-                        <form class="needs-validation">
-                            <label for="logbook">Log Book</label>
-                            <select class="form-select" aria-label="Select Logbook">
-                                <option selected disabled>Select</option>
-                                <option value="1">Cryo</option>
-                                <option value="2">Water</option>
-                                <option value="3">Target IV</option>
-                            </select>
+                        <label for="logbook">Log Book</label>
+                        <select class="form-select" aria-label="Select Logbook" id="logbook" required>
+                            <option selected disabled value="">Select</option>
+                            <option value="1">Cryo</option>
+                            <option value="2">Water</option>
+                            <option value="3">Target IV</option>
+                        </select>
                     </div>
                     <div class="col-md-6 py-1">
                         <label for="author">Author</label>
-                        <select class="form-select" aria-label="Author">
-                            <option selected disabled>Select</option>
+                        <select class="form-select" aria-label="Author" id="author" required>
+                            <option selected disabled value="">Select</option>
                             <% operators.forEach(operator=> { %>
                                 <option value="<%= operator.id %>">
                                     <%= operator.name %>
@@ -89,9 +88,9 @@
                         </select>
                     </div>
                     <div class="col-md-12 py-1">
-                        <label for="issues">Apply Post to Existing Issue</label>
-                        <select class="form-select" aria-label="Issue">
-                            <option selected>Select</option>
+                        <label for="issue">Apply Post to Existing Issue</label>
+                        <select class="form-select" aria-label="Issue" id="issue">
+                            <option selected value="">Select</option>
                             <% issues.forEach(issue=> { %>
                                 <option value="<%= issue.id %>">
                                     <%= issue.logbook %> | <%= issue.title %>
@@ -108,78 +107,156 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="newIssueText" placeholder="name@example.com"
-                                disabled>
-                            <label for="newIssueText">New Issue Title</label>
+                    <div class="col-md-6 py-1">
+                        <div class="form-check">
+                            <input type="checkbox" value="" class="form-check-input" id="resolveIssue" disabled>
+                            <label for="resolveIssue" class="form-check-label">Resolve issue with this log
+                                entry</label>
                         </div>
                     </div>
-
-                    <script type="module">
-                        import Tags from "https://cdn.jsdelivr.net/gh/lekoala/bootstrap5-tags@master/tags.js";
-                        Tags.init("#validationTagsClear");
-                    </script>
-
-                    <form class="needs-validation" novalidate method="get" action="https://vercel-dumper.vercel.app/">
-                        <div class="row mb-3 g-3">
-                            <div class="col-md-4">
-                                <label for="validationTagsClear" class="form-label">Equipment Tags</label>
-                                <select class="form-select" id="validationTagsClear" name="tagsClear[]" multiple
-                                    data-allow-clear="true">
-                                    <option selected disabled hidden value="">Choose a tag...</option>
-                                    <% tags.forEach(tag=> { %>
-                                        <option value="<%= tag %>">
-                                            <%= tag %>
-                                        </option>
-                                        <% }) %>
-                                </select>
-                                <div class="invalid-feedback">Please select a valid tag.</div>
-                            </div>
-                        </div>
-
-                        <label for="editor">Log Entry Text</label>
-                        <div id="editor" style="height: 50vh;"></div>
-                        <button type="button" class="btn btn-primary">Submit</button>
-                    </form>
-
-                    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
-                    <script type="module">
-                        import Tags from "https://cdn.jsdelivr.net/gh/lekoala/bootstrap5-tags@master/tags.js";
-                        Tags.init("#validationTagsClear");
-                    </script>
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-                        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-                        crossorigin="anonymous"></script>
-
-                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-                    <script>
-                        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-                        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-
-                        function boxChecked() {
-                            const newIssueCheck = document.getElementById("newIssueCheck")
-                            const newIssueText = document.getElementById("newIssueText")
-                            if (newIssueCheck.checked) {
-                                newIssueText.disabled = false
-                            } else {
-                                newIssueText.disabled = true
-                            }
-                        }
+                </div>
+                <div class="col-md-12">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="newIssueText" placeholder="name@example.com"
+                            disabled>
+                        <label for="newIssueText">New Issue Title</label>
+                    </div>
+                </div>
 
 
-                        ClassicEditor
-                            .create(document.querySelector('#editor'))
-                            .then(editor => {
-                                console.log(editor);
-                            })
-                            .catch(error => {
-                                console.error(error);
-                            });
-                    </script>
+
+                <script type="module">
+                    import Tags from "https://cdn.jsdelivr.net/gh/lekoala/bootstrap5-tags@master/tags.js";
+                    Tags.init("#validationTagsClear");
+                </script>
+
+                <div class="row mb-3 g-3">
+                    <div class="col-md-4">
+                        <label for="validationTagsClear" class="form-label">Equipment Tags</label>
+                        <select class="form-select" id="validationTagsClear" name="tagsClear[]" multiple
+                            data-allow-clear="true">
+                            <option selected disabled hidden value="">Choose a tag...</option>
+                            <% tags.forEach(tag=> { %>
+                                <option value="<%= tag %>">
+                                    <%= tag %>
+                                </option>
+                                <% }) %>
+                        </select>
+                        <div class="invalid-feedback">Please select a valid tag.</div>
+                    </div>
+                </div>
+
+                <label for="editor">Log Entry Text</label>
+                <div id="editor" style="width: 100%;">
+                    <textarea name="editor1"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col md-6 pt-3">
+                        <button type="button" class="btn btn-primary" onclick="checkAndSend()">Submit</button>
+                    </div>
+                </div>
+    </div>
 
 
-                </div> <!--main container end-->
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+    <script type="module">
+        import Tags from "https://cdn.jsdelivr.net/gh/lekoala/bootstrap5-tags@master/tags.js";
+        Tags.init("#validationTagsClear");
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script>
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
+        const currentIssue = document.getElementById("issue")
+        currentIssue.addEventListener("change", event => {
+            document.getElementById("resolveIssue").disabled = false
+        })
+
+
+        function boxChecked() {
+            const newIssueCheck = document.getElementById("newIssueCheck")
+            const newIssueText = document.getElementById("newIssueText")
+            const existingIssues = document.getElementById("issue")
+            if (newIssueCheck.checked) {
+                newIssueText.disabled = false
+                existingIssues.disabled = true
+                existingIssues.value = ""
+            } else {
+                newIssueText.disabled = true
+                existingIssues.disabled = false
+            }
+        }
+
+
+        function checkAndSend() {
+            // const packageObj = {}
+            const logbook = document.getElementById("logbook")
+            const author = document.getElementById("author")
+            const htmlData = editor.getData()
+            // const logTextElement = document.getElementById("editor")
+            const logTextElement = document.getElementsByClassName("ck")[0]
+            const newIssue = document.getElementById("newIssueText")
+            const existingIssue = document.getElementById("issue")
+            const resolved = document.getElementById("newIssueCheck")
+
+            for (const item of [logbook, author]) {
+                if (item.value) {
+                    item.classList.remove("is-invalid")
+                    item.classList.add("is-valid")
+                } else {
+                    item.classList.remove("is-valid")
+                    item.classList.add("is-invalid")
+                }
+            }
+
+            if (!htmlData) {
+                logTextElement.style.border = "1px solid red"
+            } else {
+                logTextElement.style.border = "1px solid green"
+            }
+
+            const dataObj = {
+                logbook: "",
+                author: "",
+                htmlData: htmlData,
+                newIssue: "",
+                existingIssue: "",
+                isShiftSummary: "",
+            }
+
+    
+
+
+
+        }
+
+
+        function validateEntries(obj) {
+            
+
+        }
+
+
+
+        let editor
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .then(newEditor => {
+                editor = newEditor
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
+
+    </div> <!--main container end-->
 </body>
 
 </html>
