@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+const db = require("../db");
+
 const mydata = {
   title: 'AOT-OPS-TEST Narrative Log Book',
   operators: [
