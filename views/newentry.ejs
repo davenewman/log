@@ -46,74 +46,92 @@
         </h1>
 
         <!-- On Call -->
+        <script type="module">
+            import Tags from "https://cdn.jsdelivr.net/gh/lekoala/bootstrap5-tags@master/tags.js";
+            Tags.init("#validationTagsClear");
+            Tags.init("#logbook")
+            Tags.init("#issue")
+        </script>
 
-        <% if (onCall.length> 0) { %>
+        <% if (operators.length> 0) { %>
             <div class="row">
                 <div class="col py-3">
                     <p>Currently On Call:</p>
 
-                    <% onCall.forEach( person=> { %>
-                        <a tabindex="0"
-                            class="btn btn-sm <%= person.isQualifiedOperator? 'btn-info' : 'btn-danger' %> m-1"
-                            role="button" data-bs-toggle="popover" data-bs-trigger="focus"
-                            data-bs-title="<%= person.name %>"
-                            data-bs-content="<%= person.title %> | <%= person.phone %>">
-                            <%= person.name %>
+                    <% operators.forEach( person=> { %>
+                        <a tabindex="0" class="btn btn-sm btn-info m-1" role="button" data-bs-toggle="popover"
+                            data-bs-trigger="focus" data-id="<%= person.operator_id %>"
+                            data-bs-title="<%= `${person.first_name} ${person.last_name}` %>"
+                            data-bs-content="<%= person.phone %>">
+                            <%= `${person.first_name} ${person.last_name}` %>
                         </a>
                         <% }) %>
                 </div>
             </div>
             <% } %>
 
+
+
+
+
                 <div class="row">
                     <h2>New Log Entry</h2>
                     <div class="col-md-6 py-1">
                         <label for="logbook">Log Book</label>
-                        <select class="form-select" aria-label="Select Logbook" id="logbook" required>
-                            <option selected disabled value="">Select</option>
-                            <option value="1">Cryo</option>
-                            <option value="2">Water</option>
-                            <option value="3">Target IV</option>
+                        <select class="form-select" aria-label="Select Logbook" id="logbook" required name="tagsClear[]"
+                            multiple data-allow-clear="true">
+                            <option selected disabled hidden value="">select logbook(s)</option>
+                            <% logbooks.forEach(logbook=> { %>
+                                <option value="<%= logbook.logbook_id %>" data-id="<%= logbook.logbook_id %>">
+                                    <%= logbook.title %>
+                                </option>
+                                <% }) %>
                         </select>
                     </div>
+
                     <div class="col-md-6 py-1">
                         <label for="author">Author</label>
                         <select class="form-select" aria-label="Author" id="author" required>
                             <option selected disabled value="">Select</option>
                             <% operators.forEach(operator=> { %>
-                                <option value="<%= operator.id %>">
-                                    <%= operator.name %>
+                                <option value="<%= operator.operator_id %> " data-id="<%= operator.operator_id %>">
+                                    <%= `${operator.first_name} ${operator.last_name}` %>
                                 </option>
                                 <% }) %>
                         </select>
                     </div>
-                    <div class="col-md-12 py-1">
-                        <label for="issue">Apply Post to Existing Issue</label>
-                        <select class="form-select" aria-label="Issue" id="issue">
-                            <option selected value="">Select</option>
-                            <% issues.forEach(issue=> { %>
-                                <option value="<%= issue.id %>">
-                                    <%= issue.logbook %> | <%= issue.title %>
-                                </option>
-                                <% }) %>
-                        </select>
-                    </div>
-                    <div class="col-md-6 py-1">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="newIssueCheck"
-                                onclick="boxChecked()">
-                            <label class="form-check-label" for="newIssueCheck">
-                                Make this post a new trackable issue
-                            </label>
+
+                    <% if (issues) { %>
+                        <div class="col-md-12 py-1">
+                            <label for="issue">Apply Post to Existing Issue</label>
+                            <select class="form-select" aria-label="Issue" id="issue" name="tagsClear[]" multiple
+                                data-allow-clear="true">
+                                <option selected disabled hidden value="">Select</option>
+                                <% issues.forEach(issue=> { %>
+                                    <option value="<%= issue.issue_id %>" data-id="issue.issue_id">
+                                        <%= issue.title %>
+                                    </option>
+                                    <% }) %>
+                            </select>
                         </div>
-                    </div>
-                    <div class="col-md-6 py-1">
-                        <div class="form-check">
-                            <input type="checkbox" value="" class="form-check-input" id="resolveIssue" disabled>
-                            <label for="resolveIssue" class="form-check-label">Resolve issue with this log
-                                entry</label>
-                        </div>
-                    </div>
+
+                        <% } %>
+                            <div class="col-md-6 py-1">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="newIssueCheck"
+                                        onclick="boxChecked()">
+                                    <label class="form-check-label" for="newIssueCheck">
+                                        Make this post a new trackable issue
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 py-1">
+                                <div class="form-check">
+                                    <input type="checkbox" value="" class="form-check-input" id="resolveIssue" disabled>
+                                    <label for="resolveIssue" class="form-check-label">Resolve issue with this log
+                                        entry</label>
+                                </div>
+                            </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-floating mb-3">
@@ -125,26 +143,24 @@
 
 
 
-                <script type="module">
-                    import Tags from "https://cdn.jsdelivr.net/gh/lekoala/bootstrap5-tags@master/tags.js";
-                    Tags.init("#validationTagsClear");
-                </script>
+
 
                 <div class="row mb-3 g-3">
                     <div class="col-md-4">
-                        <label for="validationTagsClear" class="form-label">Equipment Tags</label>
+                        <label for="validationTagsClear">Equipment Tags</label>
                         <select class="form-select" id="validationTagsClear" name="tagsClear[]" multiple
                             data-allow-clear="true">
                             <option selected disabled hidden value="">Choose a tag...</option>
                             <% tags.forEach(tag=> { %>
-                                <option value="<%= tag %>">
-                                    <%= tag %>
+                                <option value="<%= tag.tag_id %>" data-id="<%= tag.tag_id %>">
+                                    <%= tag.name %>
                                 </option>
                                 <% }) %>
                         </select>
                         <div class="invalid-feedback">Please select a valid tag.</div>
                     </div>
                 </div>
+
 
                 <label for="editor">Log Entry Text</label>
                 <div id="editor" style="width: 100%;">
@@ -194,18 +210,42 @@
         }
 
 
-        function checkAndSend() {
+        async function checkAndSend() {
             // const packageObj = {}
-            const logbook = document.getElementById("logbook")
-            const author = document.getElementById("author")
+            const logbook = document.getElementById("logbook");
+            const logbooks = [];
+            for (const child of logbook.children) {
+                if (child.selected) {
+                    logbooks.push(child.dataset.id);
+                }
+            }
+
+            const existingIssue = document.getElementById("issue");
+            const existingIssues = [];
+            for (const child of existingIssue.children) {
+                if (child.selected) {
+                    existingIssues.push(child.dataset.id);
+                }
+            }
+
+            const tag = document.getElementById("validationTagsClear");
+            const tags = [];
+            for (const child of tag.children) {
+                if (child.selected) {
+                    tags.push(child.dataset.id);
+                }
+            }
+
+
+            const authorDiv = document.getElementById("author")
+            const author = document.getElementById("author").value
             const htmlData = editor.getData()
-            // const logTextElement = document.getElementById("editor")
             const logTextElement = document.getElementsByClassName("ck")[0]
             const newIssue = document.getElementById("newIssueText")
-            const existingIssue = document.getElementById("issue")
+
             const resolved = document.getElementById("newIssueCheck")
 
-            for (const item of [logbook, author]) {
+            for (const item of [logbook, authorDiv]) {
                 if (item.value) {
                     item.classList.remove("is-invalid")
                     item.classList.add("is-valid")
@@ -221,28 +261,36 @@
                 logTextElement.style.border = "1px solid green"
             }
 
-            const dataObj = {
-                logbook: "",
-                author: "",
-                htmlData: htmlData,
-                newIssue: "",
-                existingIssue: "",
-                isShiftSummary: "",
+            if (htmlData && author && logbooks) {
+                const dataObj = {
+                    logbooks: logbooks,
+                    author: author,
+                    htmlData: htmlData,
+                    newIssue: newIssue.value,
+                    existingIssue: existingIssues,
+                    tags: tags,
+                    isShiftSummary: 0,
+                }
+
+                console.log(JSON.stringify(dataObj));
+
+                const response = await fetch("/newentry", {
+                    method: "POST",
+                    body: JSON.stringify(dataObj),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+
+                console.log(response);
             }
-
-    
-
 
 
         }
 
 
         function validateEntries(obj) {
-            
-
         }
-
-
 
         let editor
         ClassicEditor
